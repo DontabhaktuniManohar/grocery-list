@@ -41,10 +41,6 @@ const elements = {
   emptyAddButton: document.getElementById('emptyAddButton'),
   pdfButton: document.getElementById('pdfButton'),
   clearPurchasedButton: document.getElementById('clearPurchasedButton'),
-  exportButton: document.getElementById('exportButton'),
-  importButton: document.getElementById('importButton'),
-  importInput: document.getElementById('importInput'),
-  clearAllButton: document.getElementById('clearAllButton'),
   itemDialog: document.getElementById('itemDialog'),
   dialogTitle: document.getElementById('dialogTitle'),
   groceryForm: document.getElementById('groceryForm'),
@@ -357,64 +353,6 @@ function clearPurchasedItems() {
   );
 }
 
-function exportGroceries() {
-  const blob = new Blob([JSON.stringify(groceries, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  const dateStamp = new Date().toISOString().slice(0, 10);
-
-  link.href = url;
-  link.download = `grocery-list-${dateStamp}.json`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
-
-function importGroceries(file) {
-  if (!file) {
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = event => {
-    try {
-      const parsed = JSON.parse(String(event.target.result));
-      if (!Array.isArray(parsed)) {
-        throw new Error('Imported file is not a JSON array.');
-      }
-
-      const sanitized = parsed.map(normalizeItem).filter(item => item.name && item.quantity > 0);
-      if (!sanitized.length) {
-        throw new Error('No valid grocery items found in the import file.');
-      }
-
-      groceries = sanitized;
-      saveGroceries();
-      render();
-    } catch (error) {
-      window.alert('Unable to import groceries. Please choose a valid grocery list export file.');
-      console.error(error);
-    }
-  };
-
-  reader.readAsText(file);
-}
-
-function clearAllData() {
-  openConfirmDialog(
-    'Clear all data?',
-    'This will permanently remove every grocery item stored on this device.',
-    'Clear All',
-    () => {
-      groceries = [];
-      saveGroceries();
-      render();
-      closeConfirmDialog();
-    }
-  );
-}
-
 function renderPrintArea() {
   const filteredItems = getFilteredGroceries();
   const groups = CATEGORY_OPTIONS.map(category => ({
@@ -536,14 +474,6 @@ function initializeControls() {
 
   elements.pdfButton.addEventListener('click', generatePdf);
   elements.clearPurchasedButton.addEventListener('click', clearPurchasedItems);
-  elements.exportButton.addEventListener('click', exportGroceries);
-  elements.importButton.addEventListener('click', () => elements.importInput.click());
-  elements.importInput.addEventListener('change', event => {
-    const [file] = event.target.files;
-    importGroceries(file);
-    event.target.value = '';
-  });
-  elements.clearAllButton.addEventListener('click', clearAllData);
 
   elements.cancelConfirmButton.addEventListener('click', closeConfirmDialog);
   elements.confirmActionButton.addEventListener('click', () => {
