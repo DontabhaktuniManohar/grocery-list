@@ -1,5 +1,5 @@
-const CACHE_NAME = 'grocery-list-v2';
-const APP_SHELL = ['./', './index.html', './style.css', './app.js', './manifest.json'];
+const CACHE_NAME = 'grocery-list-v4';
+const APP_SHELL = ['./', './index.html', './style.css', './app.js', './manifest.json', './data/grocery-items.json'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
