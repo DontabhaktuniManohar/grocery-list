@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Milk",
+    "category": "Dairy",
+    "defaultUnit": "L",
+    "units": ["ml", "L"]
+  },
+  {
+    "name": "Rice",
+    "category": "Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Tomato",
+    "category": "Vegetables",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Eggs",
+    "category": "Dairy",
+    "defaultUnit": "pcs",
+    "units": ["pcs", "dozen"]
+  },
+  {
+    "name": "Onion",
+    "category": "Vegetables",
+    "defaultUnit": "kg",
+    "units": ["g", "kg", "pcs"]
+  },
+  {
+    "name": "Bread",
+    "category": "Bakery",
+    "defaultUnit": "packet",
+    "units": ["packet", "pack", "piece"]
+  },
+  {
+    "name": "Banana",
+    "category": "Fruits",
+    "defaultUnit": "pcs",
+    "units": ["pcs", "dozen"]
+  },
+  {
+    "name": "Cooking Oil",
+    "category": "Groceries",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Yogurt",
+    "category": "Dairy",
+    "defaultUnit": "pcs",
+    "units": ["pcs", "pack", "bottle"]
+  },
+  {
+    "name": "Toothpaste",
+    "category": "Personal Care",
+    "defaultUnit": "tube",
+    "units": ["tube", "pack", "bottle"]
+  }
+]
