@@ -1,0 +1,18 @@
+{
+  "name": "Grocery List",
+  "short_name": "Grocery",
+  "description": "A simple grocery list app for mobile browsers.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f7f5",
+  "theme_color": "#2e7d32",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%232e7d32'/%3E%3Cg fill='white'%3E%3Cpath d='M152 160c0-24 20-44 44-44h120c24 0 44 20 44 44v18h24c18 0 34 15 34 33l-24 186c-4 29-29 51-58 51H178c-29 0-54-22-58-51l-24-186c0-18 15-33 34-33h24v-18zm52-18h104c0-18-14-32-32-32h-40c-18 0-32 14-32 32zm-42 92h184l-14 108H180l-18-108z'/%3E%3C/g%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

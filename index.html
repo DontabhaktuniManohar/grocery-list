@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2e7d32" />
+    <meta
+      name="description"
+      content="A simple mobile-first grocery list that stores items locally in the browser."
+    />
+    <title>Grocery List</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Shopping</p>
+          <h1>🛒 Grocery List</h1>
+        </div>
+        <button id="addButton" class="primary-button" type="button">+ Add Grocery</button>
+      </header>
+
+      <section class="toolbar" aria-label="Search and filter groceries">
+        <label class="search-box" for="searchInput">
+          <span class="sr-only">Search groceries</span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="🔍 Search groceries..."
+            aria-label="Search groceries"
+          />
+        </label>
+
+        <div class="filters">
+          <label class="field">
+            <span>Category</span>
+            <select id="categoryFilter" aria-label="Filter by category">
+              <option value="All Categories">All Categories</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Fruits">Fruits</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Groceries">Groceries</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Household">Household</option>
+              <option value="Personal Care">Personal Care</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Sort by</span>
+            <select id="sortSelect" aria-label="Sort groceries">
+              <option value="recent">Recently Added</option>
+              <option value="name">Name</option>
+              <option value="category">Category</option>
+              <option value="purchased">Purchased</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="summary" aria-label="Grocery summary">
+        <div class="summary-item">
+          <strong id="itemsCount">0</strong>
+          <span>Items</span>
+        </div>
+        <div class="summary-item">
+          <strong id="purchasedCount">0</strong>
+          <span>Purchased</span>
+        </div>
+      </section>
+
+      <main>
+        <div id="groceryList" class="grocery-list" aria-live="polite"></div>
+
+        <div id="emptyState" class="empty-state hidden" aria-live="polite">
+          <div class="empty-icon">🛒</div>
+          <h2>Your grocery list is empty.</h2>
+          <p>Add your first grocery item.</p>
+          <button id="emptyAddButton" class="primary-button" type="button">+ Add Grocery</button>
+        </div>
+      </main>
+
+      <section id="printArea" class="print-area" aria-live="polite"></section>
+
+      <section class="settings-panel" aria-label="Settings">
+        <h2>Settings</h2>
+        <div class="settings-actions">
+          <button id="exportButton" type="button" class="secondary-button">Export Grocery List</button>
+          <button id="importButton" type="button" class="secondary-button">Import Grocery List</button>
+          <button id="clearAllButton" type="button" class="danger-button">Clear All Data</button>
+        </div>
+        <input id="importInput" type="file" accept="application/json" hidden />
+      </section>
+
+      <div class="sticky-actions">
+        <button id="pdfButton" class="accent-button" type="button">📄 Generate PDF</button>
+        <button id="clearPurchasedButton" class="ghost-button" type="button">Clear Purchased</button>
+      </div>
+    </div>
+
+    <div id="itemDialog" class="modal hidden" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+        <div class="modal-header">
+          <h2 id="dialogTitle">Add Grocery</h2>
+          <button id="closeDialogButton" type="button" class="icon-button" aria-label="Close dialog">×</button>
+        </div>
+
+        <form id="groceryForm">
+          <label class="field">
+            <span>Item name</span>
+            <input id="itemName" name="itemName" type="text" maxlength="80" required />
+          </label>
+
+          <div class="two-columns">
+            <label class="field">
+              <span>Quantity</span>
+              <input id="itemQuantity" name="itemQuantity" type="number" min="0.1" step="0.1" required />
+            </label>
+
+            <label class="field">
+              <span>Unit</span>
+              <select id="itemUnit" name="itemUnit">
+                <option value="kg">kg</option>
+                <option value="g">g</option>
+                <option value="L">L</option>
+                <option value="ml">ml</option>
+                <option value="packet">packet</option>
+                <option value="box">box</option>
+                <option value="piece">piece</option>
+                <option value="dozen">dozen</option>
+                <option value="bottle">bottle</option>
+                <option value="bundle">bundle</option>
+                <option value="custom">Custom</option>
+              </select>
+            </label>
+          </div>
+
+          <label id="customUnitWrap" class="field hidden">
+            <span>Custom unit</span>
+            <input id="customUnit" name="customUnit" type="text" maxlength="20" placeholder="e.g. pack" />
+          </label>
+
+          <label class="field">
+            <span>Category</span>
+            <select id="itemCategory" name="itemCategory">
+              <option value="">Select category (optional)</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Fruits">Fruits</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Groceries">Groceries</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Household">Household</option>
+              <option value="Personal Care">Personal Care</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+
+          <div class="modal-actions">
+            <button type="button" id="cancelItemButton" class="secondary-button">Cancel</button>
+            <button type="submit" class="primary-button">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="confirmDialog" class="modal hidden" aria-hidden="true">
+      <div class="modal-card confirm-card" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+        <h2 id="confirmTitle">Delete item?</h2>
+        <p id="confirmMessage">Are you sure?</p>
+        <div class="modal-actions">
+          <button type="button" id="cancelConfirmButton" class="secondary-button">Cancel</button>
+          <button type="button" id="confirmActionButton" class="danger-button">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
