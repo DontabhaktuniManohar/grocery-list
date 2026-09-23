@@ -1,62 +1,344 @@
 [
   {
     "name": "Milk",
-    "category": "Dairy",
+    "category": "Dairy & Fresh Produce",
     "defaultUnit": "L",
     "units": ["ml", "L"]
   },
   {
     "name": "Rice",
-    "category": "Grains",
+    "category": "Pulses & Grains",
     "defaultUnit": "kg",
     "units": ["g", "kg"]
   },
   {
     "name": "Tomato",
-    "category": "Vegetables",
+    "category": "Dairy & Fresh Produce",
     "defaultUnit": "kg",
     "units": ["g", "kg"]
   },
   {
     "name": "Eggs",
-    "category": "Dairy",
+    "category": "Dairy & Fresh Produce",
     "defaultUnit": "pcs",
     "units": ["pcs", "dozen"]
   },
   {
     "name": "Onion",
-    "category": "Vegetables",
+    "category": "Dairy & Fresh Produce",
     "defaultUnit": "kg",
     "units": ["g", "kg", "pcs"]
   },
   {
     "name": "Bread",
-    "category": "Bakery",
+    "category": "Others",
     "defaultUnit": "packet",
     "units": ["packet", "pack", "piece"]
   },
   {
     "name": "Banana",
-    "category": "Fruits",
+    "category": "Dairy & Fresh Produce",
     "defaultUnit": "pcs",
     "units": ["pcs", "dozen"]
   },
   {
     "name": "Cooking Oil",
-    "category": "Groceries",
+    "category": "Oils & Cooking Liquids",
     "defaultUnit": "L",
     "units": ["ml", "L", "bottle"]
   },
   {
     "name": "Yogurt",
-    "category": "Dairy",
+    "category": "Dairy & Fresh Produce",
     "defaultUnit": "pcs",
     "units": ["pcs", "pack", "bottle"]
   },
   {
     "name": "Toothpaste",
-    "category": "Personal Care",
+    "category": "Personal Care & Hygiene",
     "defaultUnit": "tube",
     "units": ["tube", "pack", "bottle"]
+  },
+  {
+    "name": "Toor Dal",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Moong Dal",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Chana Dal",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Urad Dal",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Wheat Flour (Atta)",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Oats",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Millets",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "All-Purpose Flour (Maida)",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Gram Flour (Besan)",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Cornstarch",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Rice Flour",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Semolina (Suji)",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Salt",
+    "category": "Spices & Condiments",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Turmeric",
+    "category": "Spices & Condiments",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Chili Powder",
+    "category": "Spices & Condiments",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Coriander Powder",
+    "category": "Spices & Condiments",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Cumin",
+    "category": "Spices & Condiments",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Whole Spices",
+    "category": "Spices & Condiments",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Mustard Seeds",
+    "category": "Spices & Condiments",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Ghee",
+    "category": "Oils & Cooking Liquids",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Vinegar",
+    "category": "Oils & Cooking Liquids",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Soy Sauce",
+    "category": "Oils & Cooking Liquids",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Curd",
+    "category": "Dairy & Fresh Produce",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "pack"]
+  },
+  {
+    "name": "Paneer",
+    "category": "Dairy & Fresh Produce",
+    "defaultUnit": "kg",
+    "units": ["g", "kg", "pcs"]
+  },
+  {
+    "name": "Butter",
+    "category": "Dairy & Fresh Produce",
+    "defaultUnit": "kg",
+    "units": ["g", "kg", "pack"]
+  },
+  {
+    "name": "Vegetables",
+    "category": "Dairy & Fresh Produce",
+    "defaultUnit": "kg",
+    "units": ["g", "kg", "pcs"]
+  },
+  {
+    "name": "Fruits",
+    "category": "Dairy & Fresh Produce",
+    "defaultUnit": "kg",
+    "units": ["g", "kg", "pcs"]
+  },
+  {
+    "name": "Tea Leaves",
+    "category": "Beverages & Sweeteners",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Coffee Powder",
+    "category": "Beverages & Sweeteners",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Sugar",
+    "category": "Beverages & Sweeteners",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Jaggery",
+    "category": "Beverages & Sweeteners",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Dishwashing Liquid",
+    "category": "Dishwashing",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Dishwashing Bar",
+    "category": "Dishwashing",
+    "defaultUnit": "pcs",
+    "units": ["pcs", "pack"]
+  },
+  {
+    "name": "Dishwasher Tablets/Powder",
+    "category": "Dishwashing",
+    "defaultUnit": "pack",
+    "units": ["pack", "pcs", "box"]
+  },
+  {
+    "name": "Floor Cleaner Liquid",
+    "category": "Laundry & Floor Cleaning",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Laundry Detergent",
+    "category": "Laundry & Floor Cleaning",
+    "defaultUnit": "kg",
+    "units": ["g", "kg", "pack"]
+  },
+  {
+    "name": "Fabric Softener",
+    "category": "Laundry & Floor Cleaning",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Surface Cleaner",
+    "category": "Laundry & Floor Cleaning",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Toilet Cleaner",
+    "category": "Laundry & Floor Cleaning",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Bath Soap",
+    "category": "Personal Care & Hygiene",
+    "defaultUnit": "pcs",
+    "units": ["pcs", "pack"]
+  },
+  {
+    "name": "Hand Wash",
+    "category": "Personal Care & Hygiene",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Shampoo",
+    "category": "Personal Care & Hygiene",
+    "defaultUnit": "ml",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Tissue Paper",
+    "category": "Paper & Disposable Goods",
+    "defaultUnit": "pack",
+    "units": ["pack", "pcs"]
+  },
+  {
+    "name": "Kitchen Towels",
+    "category": "Paper & Disposable Goods",
+    "defaultUnit": "pack",
+    "units": ["pack", "pcs"]
+  },
+  {
+    "name": "Garbage Bags",
+    "category": "Paper & Disposable Goods",
+    "defaultUnit": "pack",
+    "units": ["pack", "pcs"]
+  },
+  {
+    "name": "Sponge Scrubber",
+    "category": "Paper & Disposable Goods",
+    "defaultUnit": "pcs",
+    "units": ["pcs", "pack"]
+  },
+  {
+    "name": "Mop Heads",
+    "category": "Paper & Disposable Goods",
+    "defaultUnit": "pcs",
+    "units": ["pcs", "pack"]
   }
 ]

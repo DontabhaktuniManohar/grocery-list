@@ -3,14 +3,16 @@ const RECENT_KEY = 'groceryRecentItems';
 const USAGE_KEY = 'groceryUsageStats';
 const MASTER_ITEMS_URL = './data/grocery-items.json';
 const CATEGORY_OPTIONS = [
-  'Vegetables',
-  'Fruits',
-  'Dairy',
-  'Groceries',
-  'Spices',
-  'Beverages',
-  'Household',
-  'Personal Care',
+  'Pulses & Grains',
+  'Flours & Starches',
+  'Spices & Condiments',
+  'Oils & Cooking Liquids',
+  'Dairy & Fresh Produce',
+  'Beverages & Sweeteners',
+  'Dishwashing',
+  'Laundry & Floor Cleaning',
+  'Personal Care & Hygiene',
+  'Paper & Disposable Goods',
   'Others'
 ];
 const UNIT_OPTIONS = ['kg', 'g', 'L', 'ml', 'packet', 'box', 'piece', 'dozen', 'bottle', 'bundle'];
@@ -27,7 +29,9 @@ const state = {
   recentItems: readRecentItems(),
   masterItems: [],
   selectedQuickItem: null,
-  quickSuggestionIndex: -1
+  quickSuggestionIndex: -1,
+  pdfSelectedCategories: CATEGORY_OPTIONS.slice(),
+  defaultSelectedCategories: CATEGORY_OPTIONS.slice()
 };
 
 let groceries = readGroceries();
@@ -52,6 +56,19 @@ const elements = {
   pdfButton: document.getElementById('pdfButton'),
   clearPurchasedButton: document.getElementById('clearPurchasedButton'),
   clearAllButton: document.getElementById('clearAllButton'),
+  pdfCategoryDialog: document.getElementById('pdfCategoryDialog'),
+  pdfCategoryList: document.getElementById('pdfCategoryList'),
+  pdfCloseButton: document.getElementById('pdfCloseButton'),
+  pdfSelectAllButton: document.getElementById('pdfSelectAllButton'),
+  pdfCancelButton: document.getElementById('pdfCancelButton'),
+  pdfGenerateButton: document.getElementById('pdfGenerateButton'),
+  defaultCategoryDialog: document.getElementById('defaultCategoryDialog'),
+  defaultCategoryList: document.getElementById('defaultCategoryList'),
+  defaultCategoryCloseButton: document.getElementById('defaultCategoryCloseButton'),
+  defaultCategorySelectAllButton: document.getElementById('defaultCategorySelectAllButton'),
+  defaultCategoryCancelButton: document.getElementById('defaultCategoryCancelButton'),
+  defaultCategoryAddButton: document.getElementById('defaultCategoryAddButton'),
+  emptyAddDefaultButton: document.getElementById('emptyAddDefaultButton'),
   itemDialog: document.getElementById('itemDialog'),
   dialogTitle: document.getElementById('dialogTitle'),
   groceryForm: document.getElementById('groceryForm'),
@@ -868,22 +885,111 @@ function clearAllGroceries() {
   );
 }
 
-function renderPrintArea() {
+function getSelectedPdfCategories() {
+  const selected = Array.from(elements.pdfCategoryList?.querySelectorAll('input[type="checkbox"]:checked') || [])
+    .map(checkbox => checkbox.value)
+    .filter(Boolean);
+
+  return selected.length ? selected : [];
+}
+
+function renderPdfCategoryOptions() {
+  if (!elements.pdfCategoryList) {
+    return;
+  }
+
+  elements.pdfCategoryList.innerHTML = CATEGORY_OPTIONS.map(category => `
+    <label class="pdf-category-option">
+      <input type="checkbox" value="${escapeHtml(category)}" ${state.pdfSelectedCategories.includes(category) ? 'checked' : ''} />
+      <span>${escapeHtml(category)}</span>
+    </label>
+  `).join('');
+}
+
+function renderDefaultCategoryOptions() {
+  if (!elements.defaultCategoryList) {
+    return;
+  }
+
+  elements.defaultCategoryList.innerHTML = CATEGORY_OPTIONS.map(category => `
+    <label class="pdf-category-option">
+      <input type="checkbox" value="${escapeHtml(category)}" ${state.defaultSelectedCategories.includes(category) ? 'checked' : ''} />
+      <span>${escapeHtml(category)}</span>
+    </label>
+  `).join('');
+}
+
+function openPdfCategoryDialog() {
+  state.pdfSelectedCategories = state.pdfSelectedCategories.length ? state.pdfSelectedCategories : CATEGORY_OPTIONS.slice();
+  renderPdfCategoryOptions();
+  elements.pdfCategoryDialog?.classList.remove('hidden');
+  elements.pdfCategoryDialog?.setAttribute('aria-hidden', 'false');
+}
+
+function openDefaultCategoryDialog() {
+  state.defaultSelectedCategories = state.defaultSelectedCategories.length ? state.defaultSelectedCategories : CATEGORY_OPTIONS.slice();
+  renderDefaultCategoryOptions();
+  elements.defaultCategoryDialog?.classList.remove('hidden');
+  elements.defaultCategoryDialog?.setAttribute('aria-hidden', 'false');
+}
+
+function closePdfCategoryDialog() {
+  elements.pdfCategoryDialog?.classList.add('hidden');
+  elements.pdfCategoryDialog?.setAttribute('aria-hidden', 'true');
+}
+
+function closeDefaultCategoryDialog() {
+  elements.defaultCategoryDialog?.classList.add('hidden');
+  elements.defaultCategoryDialog?.setAttribute('aria-hidden', 'true');
+}
+
+function addDefaultGroceriesByCategory() {
+  const selected = Array.from(elements.defaultCategoryList?.querySelectorAll('input[type="checkbox"]:checked') || [])
+    .map(checkbox => checkbox.value)
+    .filter(Boolean);
+
+  const categories = selected.length ? selected : [];
+
+  if (!categories.length) {
+    return;
+  }
+
+  const additions = state.masterItems
+    .filter(item => categories.includes(item.category))
+    .map(item => ({
+      id: createId(),
+      name: item.name,
+      quantity: 1,
+      unit: item.defaultUnit || 'pcs',
+      category: item.category,
+      purchased: false,
+      createdAt: Date.now() + Math.random()
+    }));
+
+  groceries = [...groceries, ...additions];
+  saveGroceries();
+  render();
+  closeDefaultCategoryDialog();
+}
+
+function renderPrintArea(selectedCategories = null) {
+  const categoriesToRender = selectedCategories && selectedCategories.length ? selectedCategories : [];
+  const selectedSet = new Set(categoriesToRender);
   const filteredItems = getFilteredGroceries();
-  const groups = CATEGORY_OPTIONS.map(category => ({
+
+  const groups = CATEGORY_OPTIONS.filter(category => selectedSet.has(category)).map(category => ({
     category,
     items: filteredItems.filter(item => item.category === category)
   })).filter(group => group.items.length > 0);
 
-  const allCategories = filteredItems.filter(item => !item.category || !CATEGORY_OPTIONS.includes(item.category));
-  if (allCategories.length) {
-    groups.push({ category: 'Others', items: allCategories });
+  const otherItems = filteredItems.filter(item => !item.category || !CATEGORY_OPTIONS.includes(item.category));
+  if (selectedSet.has('Others') && otherItems.length) {
+    groups.push({ category: 'Others', items: otherItems });
   }
 
   const printHtml = `
     <div class="print-sheet">
       <h1>GROCERY LIST</h1>
-      <div class="print-meta">Date: ${new Date().toLocaleDateString('en-GB')}</div>
       <div class="print-divider"></div>
       ${groups.length ? groups.map(group => `
         <section class="print-section">
@@ -898,13 +1004,7 @@ function renderPrintArea() {
             </div>
           `).join('')}
         </section>
-      `).join('') : '<p>No groceries match the current filters.</p>'}
-      <div class="print-divider"></div>
-      <div class="print-summary">
-        <p><strong>Total Items:</strong> ${groceries.length}</p>
-        <p><strong>Purchased:</strong> ${groceries.filter(item => item.purchased).length}</p>
-        <p><strong>Remaining:</strong> ${groceries.filter(item => !item.purchased).length}</p>
-      </div>
+      `).join('') : '<p>No groceries match the selected categories.</p>'}
     </div>
   `;
 
@@ -912,8 +1012,15 @@ function renderPrintArea() {
 }
 
 function generatePdf() {
-  renderPrintArea();
+  const selectedCategories = getSelectedPdfCategories();
+  state.pdfSelectedCategories = selectedCategories.length ? selectedCategories : CATEGORY_OPTIONS.slice();
+  const originalTitle = document.title;
+  document.title = ' ';
+  renderPrintArea(state.pdfSelectedCategories);
   window.print();
+  setTimeout(() => {
+    document.title = originalTitle;
+  }, 50);
 }
 
 function handleListClick(event) {
@@ -1153,6 +1260,14 @@ function initializeControls() {
 
   elements.addButton.addEventListener('click', () => openItemDialog());
   elements.emptyAddButton.addEventListener('click', () => openItemDialog());
+  elements.emptyAddDefaultButton.addEventListener('click', () => openDefaultCategoryDialog());
+  elements.defaultCategoryCloseButton.addEventListener('click', closeDefaultCategoryDialog);
+  elements.defaultCategoryCancelButton.addEventListener('click', closeDefaultCategoryDialog);
+  elements.defaultCategorySelectAllButton.addEventListener('click', () => {
+    state.defaultSelectedCategories = CATEGORY_OPTIONS.slice();
+    renderDefaultCategoryOptions();
+  });
+  elements.defaultCategoryAddButton.addEventListener('click', addDefaultGroceriesByCategory);
   elements.closeDialogButton.addEventListener('click', closeItemDialog);
   elements.cancelItemButton.addEventListener('click', closeItemDialog);
   elements.groceryForm.addEventListener('submit', handleSaveItem);
@@ -1172,7 +1287,23 @@ function initializeControls() {
     }
   });
 
-  elements.pdfButton.addEventListener('click', generatePdf);
+  elements.pdfButton.addEventListener('click', () => {
+    openPdfCategoryDialog();
+  });
+
+  elements.pdfCloseButton.addEventListener('click', closePdfCategoryDialog);
+  elements.pdfCancelButton.addEventListener('click', closePdfCategoryDialog);
+  elements.pdfSelectAllButton.addEventListener('click', () => {
+    state.pdfSelectedCategories = CATEGORY_OPTIONS.slice();
+    renderPdfCategoryOptions();
+  });
+  elements.pdfGenerateButton.addEventListener('click', () => {
+    const selected = getSelectedPdfCategories();
+    state.pdfSelectedCategories = selected.length ? selected : CATEGORY_OPTIONS.slice();
+    closePdfCategoryDialog();
+    generatePdf();
+  });
+
   elements.clearPurchasedButton.addEventListener('click', clearPurchasedItems);
   elements.clearAllButton.addEventListener('click', clearAllGroceries);
 
