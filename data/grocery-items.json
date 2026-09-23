@@ -340,5 +340,191 @@
     "category": "Paper & Disposable Goods",
     "defaultUnit": "pcs",
     "units": ["pcs", "pack"]
+  },
+  {
+    "name": "Harpic",
+    "category": "Laundry & Floor Cleaning",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Knorr Soup",
+    "category": "Others",
+    "defaultUnit": "packet",
+    "units": ["packet", "pack", "box"]
+  },
+  {
+    "name": "Pitambari Powder",
+    "category": "Spices & Condiments",
+    "defaultUnit": "packet",
+    "units": ["g", "kg", "packet", "pack"]
+  },
+  {
+    "name": "Black Pepper",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Stone Flower",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Cinnamon",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Clove",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Marathi Mogga",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Shahjeera",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Japatri",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Big Cardamom",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Star Anise",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Odonil",
+    "category": "Personal Care & Hygiene",
+    "defaultUnit": "box",
+    "units": ["box", "pack", "pcs"]
+  },
+  {
+    "name": "Rin Matic Liquid",
+    "category": "Laundry & Floor Cleaning",
+    "defaultUnit": "L",
+    "units": ["ml", "L", "bottle"]
+  },
+  {
+    "name": "Soaps (Fiama Dovel)",
+    "category": "Personal Care & Hygiene",
+    "defaultUnit": "box",
+    "units": ["box", "pack", "pcs"]
+  },
+  {
+    "name": "Poha",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Murmura",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Semiya",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Rice Ravva",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Sooji Ravva",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Idly Ravva",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Bansi Ravva",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Maida",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Besan",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Atta",
+    "category": "Flours & Starches",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Ajwain",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Fennel Seeds",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Jeera",
+    "category": "Spices & Condiments",
+    "defaultUnit": "g",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Peanuts",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Moong Dal",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
+  },
+  {
+    "name": "Urad Dal",
+    "category": "Pulses & Grains",
+    "defaultUnit": "kg",
+    "units": ["g", "kg"]
   }
 ]
