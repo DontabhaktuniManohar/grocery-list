@@ -1009,10 +1009,19 @@ function renderPrintArea(selectedCategories = null) {
     groups.push({ category: 'Others', items: otherItems });
   }
 
+  const totalItems = filteredItems.length;
+  const purchasedItems = filteredItems.filter(item => item.purchased).length;
+  const remainingItems = totalItems - purchasedItems;
+
   const printHtml = `
     <div class="print-sheet">
       <h1>GROCERY LIST</h1>
       <div class="print-divider"></div>
+      <div class="print-summary">
+        <div>Total Items: ${totalItems}</div>
+        <div>Purchased: ${purchasedItems}</div>
+        <div>Remaining: ${remainingItems}</div>
+      </div>
       ${groups.length ? groups.map(group => `
         <section class="print-section">
           <h2>${escapeHtml(group.category)}</h2>
