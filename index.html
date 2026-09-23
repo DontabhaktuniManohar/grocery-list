@@ -21,7 +21,6 @@
         </div>
         <div class="topbar-actions">
           <button id="shoppingModeButton" class="secondary-button shopping-mode-button" type="button">Shopping Mode</button>
-          <button id="addButton" class="primary-button" type="button">+ Add Grocery</button>
         </div>
       </header>
 
@@ -36,8 +35,10 @@
           />
           <div id="quickAddSuggestions" class="quick-add-suggestions hidden" role="listbox" aria-label="Matching grocery items"></div>
         </div>
-        <button id="quickAddButton" class="primary-button" type="button">Add</button>
+        <button id="quickAddButton" class="primary-button" type="button">Add to List</button>
       </section>
+
+      <div id="quickAddStatus" class="quick-add-status hidden" aria-live="polite"></div>
 
       <div class="quick-entry-row">
         <label class="mini-field">
@@ -126,7 +127,6 @@
           <h2>Your grocery list is empty.</h2>
           <p>Add your first grocery item.</p>
           <div class="modal-actions empty-actions">
-            <button id="emptyAddButton" class="primary-button" type="button">+ Add Grocery</button>
             <button id="emptyAddDefaultButton" class="secondary-button" type="button">Add Default Categories</button>
           </div>
         </div>

@@ -44,8 +44,7 @@ const elements = {
   emptyState: document.getElementById('emptyState'),
   itemsCount: document.getElementById('itemsCount'),
   purchasedCount: document.getElementById('purchasedCount'),
-  addButton: document.getElementById('addButton'),
-  emptyAddButton: document.getElementById('emptyAddButton'),
+  quickAddStatus: document.getElementById('quickAddStatus'),
   quickAddInput: document.getElementById('quickAddInput'),
   quickAddButton: document.getElementById('quickAddButton'),
   quickAddQuantity: document.getElementById('quickAddQuantity'),
@@ -365,6 +364,29 @@ function selectQuickSuggestion(itemName) {
   setQuickEntryOptions(item);
   elements.quickAddSuggestions.classList.add('hidden');
   state.quickSuggestionIndex = -1;
+}
+
+function hideQuickAddStatus() {
+  elements.quickAddStatus.textContent = '';
+  elements.quickAddStatus.classList.add('hidden');
+  elements.quickAddStatus.classList.remove('success', 'error');
+}
+
+function showQuickAddStatus(message, tone = 'success') {
+  if (!message) {
+    hideQuickAddStatus();
+    return;
+  }
+
+  elements.quickAddStatus.textContent = message;
+  elements.quickAddStatus.classList.remove('hidden', 'success', 'error');
+  elements.quickAddStatus.classList.add(tone);
+}
+
+function focusQuickAddInput() {
+  elements.quickAddInput.focus();
+  const end = elements.quickAddInput.value.length;
+  elements.quickAddInput.setSelectionRange(end, end);
 }
 
 function clearQuickEntry() {
@@ -1101,6 +1123,7 @@ function initializeControls() {
   });
 
   elements.quickAddInput.addEventListener('input', () => {
+    hideQuickAddStatus();
     const value = elements.quickAddInput.value.trim();
     const exact = findMasterItem(value);
     if (exact) {
@@ -1168,6 +1191,8 @@ function initializeControls() {
         saveGroceries();
         render();
         clearQuickEntry();
+        showQuickAddStatus(`✓ ${name} added`);
+        focusQuickAddInput();
         return;
       }
 
@@ -1185,6 +1210,8 @@ function initializeControls() {
       saveGroceries();
       render();
       clearQuickEntry();
+      showQuickAddStatus(`✓ ${name} added`);
+      focusQuickAddInput();
     }
   });
 
@@ -1203,6 +1230,8 @@ function initializeControls() {
       saveGroceries();
       render();
       clearQuickEntry();
+      showQuickAddStatus(`✓ ${name} added`);
+      focusQuickAddInput();
       return;
     }
 
@@ -1220,6 +1249,8 @@ function initializeControls() {
     saveGroceries();
     render();
     clearQuickEntry();
+    showQuickAddStatus(`✓ ${name} added`);
+    focusQuickAddInput();
   });
 
   elements.quickAddSuggestions.addEventListener('click', event => {
@@ -1258,8 +1289,6 @@ function initializeControls() {
     render();
   });
 
-  elements.addButton.addEventListener('click', () => openItemDialog());
-  elements.emptyAddButton.addEventListener('click', () => openItemDialog());
   elements.emptyAddDefaultButton.addEventListener('click', () => openDefaultCategoryDialog());
   elements.defaultCategoryCloseButton.addEventListener('click', closeDefaultCategoryDialog);
   elements.defaultCategoryCancelButton.addEventListener('click', closeDefaultCategoryDialog);
