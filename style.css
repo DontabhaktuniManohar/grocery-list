@@ -302,13 +302,39 @@ h1 {
 .grocery-row {
   display: grid;
   grid-template-columns: 26px minmax(0, 1.6fr) minmax(86px, 120px) minmax(0, 1fr) auto;
+  grid-template-areas: 'check name qty category actions';
   align-items: center;
   gap: 8px;
+  min-width: 0;
   padding: 10px 8px;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(31, 42, 31, 0.04);
+}
+
+.purchase-toggle {
+  grid-area: check;
+}
+
+.grocery-name {
+  grid-area: name;
+  min-width: 0;
+}
+
+.grocery-qty {
+  grid-area: qty;
+  min-width: 0;
+}
+
+.grocery-category {
+  grid-area: category;
+  min-width: 0;
+}
+
+.compact-actions {
+  grid-area: actions;
+  min-width: 0;
 }
 
 .grocery-name,
@@ -317,6 +343,7 @@ h1 {
   font-size: 0.82rem;
   line-height: 1.3;
   overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .grocery-name {
@@ -644,35 +671,72 @@ h1 {
 }
 
 @media (max-width: 520px) {
-  .grocery-row {
-    grid-template-columns: 24px minmax(0, 1.5fr) auto auto;
+  .grocery-list .grocery-row {
+    display: grid !important;
+    grid-template-columns: 22px minmax(0, 1fr) auto !important;
     grid-template-areas:
       'check name actions'
-      'check qty category actions';
+      'check qty actions'
+      'check category actions' !important;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 6px;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 8px;
   }
 
-  .purchase-toggle {
+  .grocery-list .purchase-toggle {
     grid-area: check;
+    align-self: center;
+    justify-self: center;
   }
 
-  .grocery-name {
+  .grocery-list .grocery-name {
     grid-area: name;
+    font-size: 0.82rem;
+    min-width: 0;
+    line-height: 1.35;
+    width: 100%;
   }
 
-  .grocery-qty {
+  .grocery-list .grocery-qty {
     grid-area: qty;
-  }
-
-  .grocery-category {
-    grid-area: category;
+    width: 100%;
+    font-size: 0.75rem;
     justify-self: start;
   }
 
-  .compact-actions {
+  .grocery-list .grocery-category {
+    grid-area: category;
+    width: 100%;
+    font-size: 0.7rem;
+    text-align: left;
+    justify-self: start;
+  }
+
+  .grocery-list .compact-actions {
     grid-area: actions;
     display: flex;
     flex-direction: column;
+    justify-self: end;
+    align-self: start;
     gap: 4px;
+    width: auto;
+    min-width: 34px;
+    margin-top: 0;
+  }
+
+  .grocery-list .compact-actions .small-button {
+    min-width: 32px;
+    min-height: 30px;
+    padding: 0 6px;
+    font-size: 0.75rem;
+  }
+
+  .grocery-list .qty-stepper {
+    max-width: 100%;
+    justify-content: space-between;
   }
 }
 

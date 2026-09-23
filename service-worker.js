@@ -1,4 +1,4 @@
-const CACHE_NAME = 'grocery-list-v4';
+const CACHE_NAME = 'grocery-list-v6';
 const APP_SHELL = ['./', './index.html', './style.css', './app.js', './manifest.json', './data/grocery-items.json'];
 
 self.addEventListener('install', event => {
@@ -21,19 +21,21 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+  const isAppAsset = /\.(?:js|css|html|json|png|svg|ico|webmanifest)$/i.test(event.request.url) || event.request.mode === 'navigate';
 
-      return fetch(event.request)
-        .then(networkResponse => {
+  if (!isAppAsset) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then(networkResponse => {
+        if (networkResponse && networkResponse.status === 200) {
           const responseClone = networkResponse.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
-          return networkResponse;
-        })
-        .catch(() => caches.match('./index.html'));
-    })
+        }
+        return networkResponse;
+      })
+      .catch(() => caches.match(event.request).then(cachedResponse => cachedResponse || caches.match('./index.html')))
   );
 });

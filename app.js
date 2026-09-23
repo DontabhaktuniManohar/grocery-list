@@ -2,7 +2,6 @@ const STORAGE_KEY = 'groceryList';
 const RECENT_KEY = 'groceryRecentItems';
 const USAGE_KEY = 'groceryUsageStats';
 const MASTER_ITEMS_URL = './data/grocery-items.json';
-const LEGACY_DEFAULT_ITEMS = ['Rice', 'Milk', 'Tomatoes', 'Eggs'];
 const CATEGORY_OPTIONS = [
   'Vegetables',
   'Fruits',
@@ -52,6 +51,7 @@ const elements = {
   shoppingModeButton: document.getElementById('shoppingModeButton'),
   pdfButton: document.getElementById('pdfButton'),
   clearPurchasedButton: document.getElementById('clearPurchasedButton'),
+  clearAllButton: document.getElementById('clearAllButton'),
   itemDialog: document.getElementById('itemDialog'),
   dialogTitle: document.getElementById('dialogTitle'),
   groceryForm: document.getElementById('groceryForm'),
@@ -85,19 +85,21 @@ function cleanupLegacyStorage() {
 
   try {
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed) || hasLegacyDefaultGroceries(parsed)) {
+    if (!Array.isArray(parsed)) {
       window.localStorage.removeItem(STORAGE_KEY);
+      return;
     }
-  } catch {
+
+    const sanitized = parsed
+      .filter(item => item && typeof item === 'object')
+      .map(normalizeItem)
+      .filter(item => item.name);
+
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+  } catch (error) {
+    console.warn('Unable to read local data. Clearing stale grocery list.', error);
     window.localStorage.removeItem(STORAGE_KEY);
   }
-}
-
-function hasLegacyDefaultGroceries(items) {
-  return Array.isArray(items) && items.some(item => {
-    const name = typeof item?.name === 'string' ? item.name.trim().toLowerCase() : '';
-    return LEGACY_DEFAULT_ITEMS.some(defaultName => name === defaultName.toLowerCase());
-  });
 }
 
 function readGroceries() {
@@ -113,12 +115,16 @@ function readGroceries() {
       return [];
     }
 
-    if (hasLegacyDefaultGroceries(parsed)) {
-      window.localStorage.removeItem(STORAGE_KEY);
-      return [];
+    const sanitizedItems = parsed
+      .filter(item => item && typeof item === 'object')
+      .map(normalizeItem)
+      .filter(item => item.name);
+
+    if (sanitizedItems.length !== parsed.length) {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitizedItems));
     }
 
-    return parsed.map(normalizeItem);
+    return sanitizedItems;
   } catch (error) {
     console.warn('Unable to read local data. Clearing stale grocery list.', error);
     window.localStorage.removeItem(STORAGE_KEY);
@@ -127,14 +133,16 @@ function readGroceries() {
 }
 
 function normalizeItem(item) {
-  const rawUnit = String(item.unit || 'piece').trim() || 'piece';
+  const rawUnit = String(item.unit || 'piece').trim();
+  const normalizedUnit = rawUnit || 'piece';
+  const category = String(item.category || 'Others').trim() || 'Others';
 
   return {
     id: item.id || createId(),
     name: String(item.name || '').trim(),
     quantity: Number(item.quantity) || 0,
-    unit: UNIT_OPTIONS.includes(rawUnit) ? rawUnit : 'piece',
-    category: String(item.category || 'Other').trim() || 'Other',
+    unit: UNIT_OPTIONS.includes(normalizedUnit) ? normalizedUnit : normalizedUnit,
+    category,
     purchased: Boolean(item.purchased),
     createdAt: Number(item.createdAt) || Date.now()
   };
@@ -555,9 +563,105 @@ function renderList() {
   `;
 }
 
+function applyRowLayout() {
+  const isMobile = window.innerWidth <= 520;
+
+  document.querySelectorAll('.grocery-row').forEach(row => {
+    if (isMobile) {
+      row.style.display = 'grid';
+      row.style.gridTemplateColumns = '22px minmax(0, 1fr) auto';
+      row.style.gridTemplateAreas = "'check name actions' 'check qty actions' 'check category actions'";
+      row.style.columnGap = '8px';
+      row.style.rowGap = '6px';
+      row.style.width = '100%';
+      row.style.minWidth = '0';
+      row.style.padding = '10px 8px';
+
+      const name = row.querySelector('.grocery-name');
+      const qty = row.querySelector('.grocery-qty');
+      const category = row.querySelector('.grocery-category');
+      const actions = row.querySelector('.compact-actions');
+      const check = row.querySelector('.purchase-toggle');
+
+      if (name) {
+        name.style.gridArea = 'name';
+        name.style.fontSize = '0.82rem';
+        name.style.lineHeight = '1.35';
+      }
+      if (qty) {
+        qty.style.gridArea = 'qty';
+        qty.style.fontSize = '0.75rem';
+      }
+      if (category) {
+        category.style.gridArea = 'category';
+        category.style.fontSize = '0.7rem';
+      }
+      if (actions) {
+        actions.style.gridArea = 'actions';
+        actions.style.display = 'flex';
+        actions.style.flexDirection = 'column';
+        actions.style.justifySelf = 'end';
+        actions.style.alignSelf = 'start';
+        actions.style.gap = '4px';
+        actions.style.width = 'auto';
+        actions.style.minWidth = '34px';
+      }
+      if (check) {
+        check.style.gridArea = 'check';
+        check.style.alignSelf = 'center';
+        check.style.justifySelf = 'center';
+      }
+    } else {
+      row.style.display = 'grid';
+      row.style.gridTemplateColumns = '26px minmax(0, 1.6fr) minmax(86px, 120px) minmax(0, 1fr) auto';
+      row.style.gridTemplateAreas = "'check name qty category actions'";
+      row.style.columnGap = '8px';
+      row.style.rowGap = '0';
+      row.style.width = 'auto';
+      row.style.minWidth = '0';
+      row.style.padding = '10px 8px';
+
+      const name = row.querySelector('.grocery-name');
+      const qty = row.querySelector('.grocery-qty');
+      const category = row.querySelector('.grocery-category');
+      const actions = row.querySelector('.compact-actions');
+      const check = row.querySelector('.purchase-toggle');
+
+      if (name) {
+        name.style.gridArea = 'name';
+        name.style.fontSize = '';
+      }
+      if (qty) {
+        qty.style.gridArea = 'qty';
+        qty.style.fontSize = '';
+      }
+      if (category) {
+        category.style.gridArea = 'category';
+        category.style.fontSize = '';
+      }
+      if (actions) {
+        actions.style.gridArea = 'actions';
+        actions.style.display = '';
+        actions.style.flexDirection = '';
+        actions.style.justifySelf = '';
+        actions.style.alignSelf = '';
+        actions.style.gap = '';
+        actions.style.width = '';
+        actions.style.minWidth = '';
+      }
+      if (check) {
+        check.style.gridArea = 'check';
+        check.style.alignSelf = '';
+        check.style.justifySelf = '';
+      }
+    }
+  });
+}
+
 function render() {
   renderList();
   updateSummary();
+  applyRowLayout();
 }
 
 function openItemDialog(itemId = null) {
@@ -740,6 +844,30 @@ function clearPurchasedItems() {
   );
 }
 
+function clearAllGroceries() {
+  const totalItems = groceries.length;
+
+  if (!totalItems) {
+    return;
+  }
+
+  openConfirmDialog(
+    'Clear your entire grocery list?',
+    'This will remove all items from the UI and delete the saved local grocery list.',
+    'Clear All',
+    () => {
+      groceries = [];
+      try {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } catch (error) {
+        console.error('Unable to clear the saved grocery list.', error);
+      }
+      render();
+      closeConfirmDialog();
+    }
+  );
+}
+
 function renderPrintArea() {
   const filteredItems = getFilteredGroceries();
   const groups = CATEGORY_OPTIONS.map(category => ({
@@ -823,13 +951,30 @@ function handleListClick(event) {
 }
 
 function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js').catch(error => {
-        console.warn('Service worker registration failed:', error);
-      });
-    });
+  if (!('serviceWorker' in navigator)) {
+    return;
   }
+
+  const isLocalHost = ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
+
+  const register = () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(error => {
+      console.warn('Service worker registration failed:', error);
+    });
+  };
+
+  if (isLocalHost) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      return Promise.all(registrations.map(registration => registration.unregister()));
+    }).then(() => {
+      window.addEventListener('load', register);
+    }).catch(() => {
+      window.addEventListener('load', register);
+    });
+    return;
+  }
+
+  window.addEventListener('load', register);
 }
 
 function initializeControls() {
@@ -1029,6 +1174,7 @@ function initializeControls() {
 
   elements.pdfButton.addEventListener('click', generatePdf);
   elements.clearPurchasedButton.addEventListener('click', clearPurchasedItems);
+  elements.clearAllButton.addEventListener('click', clearAllGroceries);
 
   elements.cancelConfirmButton.addEventListener('click', closeConfirmDialog);
   elements.confirmActionButton.addEventListener('click', () => {
